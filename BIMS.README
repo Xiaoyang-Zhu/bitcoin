@@ -1,0 +1,5 @@
+1. Extend the Script Language: VERIFY Operator with three operants
+
+          VERIFY  Using public key to check signature equals the given value
+
+2. Add New Types of Transactions: TX_ID {TX_reg, TX_upd, TX_rev}
