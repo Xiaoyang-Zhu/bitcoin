@@ -1,5 +1,61 @@
-1. Extend the Script Language: VERIFY Operator with three operants
+1. Extend the Script Language: OP_CHECKSIGEQVALVERIFY and ADD Operators
 
-          VERIFY  Using public key to check signature equals the given value
+            OP_CHECKSIGEQVALVERIFY(sig, pk, hash_val):  Using public key to check signature equals the given hash value;
+            ADD (x1,x2): Enable the OP_XOR in Bitcoin script;
+
+
+  File(1):
+    script.h
+
+    Line 176:
+      OP_CHECKSIGEQVALVERIFY = 0xb3,
+      OP_NOP4 = OP_CHECKSIGEQVALVERIFY,
+
+  File(2):
+    script.cpp
+      -    Line 134
+      +    case OP_CHECKSIGEQVALVERIFY     : return "OP_CHECKSIGEQVALVERIFY";
+
+  File(3):
+    src/script/interpreter.h
+
+      SCRIPT_VERIFY_CHECKSIGEQVALVERIFY = (1U << 17),
+
+
+  File(4):
+    src/script/interpreter.cpp
+
+      1) In EvalScript function, add new opcode
+
+        case OP_CHECKSIGEQVALVERIFY:
+        pop three operants and deliever to the following function
+
+
+
+      2) Add a new function like:
+
+        bool TransactionSignatureChecker::CheckSig
+
+      As:
+
+        bool ScriptSignatureChecker::CheckSig
+          pop three operands (signature, public key, hashvalue)
+          use public key to verify the signature equals hashvalue, then return true or false
+
+  File(5):
+    src/script/script_error.cpp
+
+      case SCRIPT_ERR_CHECKSIGEQVALVERIFY:
+      return "Script failed an OP_CHECKSIGEQVALVERIFY operation";
+
+  File(6):
+  src/script/script_error.h
+
+      SCRIPT_ERR_CHECKSIGEQVALVERIFY,
+
+  File(7):
+    src/policy/policy.h
+
+      SCRIPT_VERIFY_CHECKSIGEQVALVERIFY;
 
 2. Add New Types of Transactions: TX_ID {TX_reg, TX_upd, TX_rev}

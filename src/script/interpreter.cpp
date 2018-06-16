@@ -99,7 +99,7 @@ bool static IsCompressedPubKey(const valtype &vchPubKey) {
  * Where R and S are not negative (their first byte has its highest bit not set), and not
  * excessively padded (do not start with a 0 byte, unless an otherwise negative number follows,
  * in which case a single 0 byte is necessary and even required).
- * 
+ *
  * See https://bitcointalk.org/index.php?topic=8392.msg127623#msg127623
  *
  * This function is consensus-critical since BIP66.
@@ -139,7 +139,7 @@ bool static IsValidSignatureEncoding(const std::vector<unsigned char> &sig) {
     // Verify that the length of the signature matches the sum of the length
     // of the elements.
     if ((size_t)(lenR + lenS + 7) != sig.size()) return false;
- 
+
     // Check whether the R element is an integer.
     if (sig[2] != 0x02) return false;
 
@@ -427,7 +427,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                     break;
                 }
 
-                case OP_NOP1: case OP_NOP4: case OP_NOP5:
+                case OP_NOP1: case OP_NOP5:
                 case OP_NOP6: case OP_NOP7: case OP_NOP8: case OP_NOP9: case OP_NOP10:
                 {
                     if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS)
@@ -869,7 +869,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                     popstack(stack);
                     stack.push_back(vchHash);
                 }
-                break;                                   
+                break;
 
                 case OP_CODESEPARATOR:
                 {
@@ -1030,6 +1030,47 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                         else
                             return set_error(serror, SCRIPT_ERR_CHECKMULTISIGVERIFY);
                     }
+                }
+                break;
+
+                case OP_CHECKSIGEQVALVERIFY:
+                {
+                    // (sig pubkey -- bool)
+                    if (stack.size() < 3)
+                        return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
+
+                    valtype& vchval    = stacktop(-3);
+                    valtype& vchSig    = stacktop(-2);
+                    valtype& vchPubKey = stacktop(-1);
+
+                    // Subset of script starting at the most recent codeseparator
+                    CScript scriptCode(pbegincodehash, pend);
+
+                    // Drop the signature in pre-segwit scripts but not segwit scripts
+                    if (sigversion == SIGVERSION_BASE) {
+                        int found = scriptCode.FindAndDelete(CScript(vchSig));
+                        if (found > 0 && (flags & SCRIPT_VERIFY_CONST_SCRIPTCODE))
+                            return set_error(serror, SCRIPT_ERR_SIG_FINDANDDELETE);
+                    }
+
+                    if (!CheckSignatureEncoding(vchSig, flags, serror) || !CheckPubKeyEncoding(vchPubKey, flags, sigversion, serror)) {
+                        //serror is set
+                        return false;
+                    }
+                    bool fSuccess = checker.CheckSigEqVal(vchSig, vchPubKey, vchval);
+
+                    if (!fSuccess && (flags & SCRIPT_VERIFY_NULLFAIL) && vchSig.size())
+                        return set_error(serror, SCRIPT_ERR_SIG_NULLFAIL);
+
+                    popstack(stack);
+                    popstack(stack);
+                    popstack(stack);
+                    stack.push_back(fSuccess ? vchTrue : vchFalse);
+
+                    if (fSuccess)
+                        popstack(stack);
+                    else
+                        return set_error(serror, SCRIPT_ERR_CHECKSIGEQVALVERIFY);
                 }
                 break;
 
@@ -1277,6 +1318,26 @@ bool TransactionSignatureChecker::CheckSig(const std::vector<unsigned char>& vch
     uint256 sighash = SignatureHash(scriptCode, *txTo, nIn, nHashType, amount, sigversion, this->txdata);
 
     if (!VerifySignature(vchSig, pubkey, sighash))
+        return false;
+
+    return true;
+}
+
+bool TransactionSignatureChecker::CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector<unsigned char>& vchPubKey, const std::vector<unsigned char>& vchVal) const
+{
+    CPubKey pubkey(vchPubKey);
+    if (!pubkey.IsValid())
+        return false;
+
+    // Hash type is one byte tacked on to the end of the signature
+    std::vector<unsigned char> vchSig(vchSigIn);
+    if (vchSig.empty())
+        return false;
+    int nHashType = vchSig.back();
+    vchSig.pop_back();
+
+    //vchVal should be uint256?
+    if (!VerifySignature(vchSig, pubkey, vchVal))
         return false;
 
     return true;

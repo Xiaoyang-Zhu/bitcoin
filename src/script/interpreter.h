@@ -115,6 +115,9 @@ enum
     // Making OP_CODESEPARATOR and FindAndDelete fail any non-segwit scripts
     //
     SCRIPT_VERIFY_CONST_SCRIPTCODE = (1U << 16),
+    //
+    // add standard tx to policy.h
+    SCRIPT_VERIFY_CHECKSIGEQVALVERIFY = (1U << 17),
 };
 
 bool CheckSignatureEncoding(const std::vector<unsigned char> &vchSig, unsigned int flags, ScriptError* serror);
