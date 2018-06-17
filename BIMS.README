@@ -1,7 +1,7 @@
 1. Extend the Script Language: OP_CHECKSIGEQVALVERIFY and ADD Operators
 
             OP_CHECKSIGEQVALVERIFY(sig, pk, hash_val):  Using public key to check signature equals the given hash value;
-            ADD (x1,x2): Enable the OP_XOR in Bitcoin script;
+            ADD (x1,x2): use OP_ADD in Bitcoin script; but you need check the overflow condition
 
 
   File(1):
@@ -20,6 +20,9 @@
     src/script/interpreter.h
 
       SCRIPT_VERIFY_CHECKSIGEQVALVERIFY = (1U << 17),
+
+      //declare member function 
+      bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CScriptWitness* witness, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* serror = nullptr);
 
 
   File(4):
@@ -59,3 +62,12 @@
       SCRIPT_VERIFY_CHECKSIGEQVALVERIFY;
 
 2. Add New Types of Transactions: TX_ID {TX_reg, TX_upd, TX_rev}
+
+
+
+
+
+
+Compile, Build and Deploy:
+
+    1. following the build-osx.md file in ./doc/, which we have updated and added more instructions

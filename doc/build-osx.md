@@ -20,6 +20,18 @@ Dependencies
 
 See [dependencies.md](dependencies.md) for a complete overview.
 
+If you have installed some packages like openssl, you just need to delete the corresponding name in the previous commandline.
+
+If you have trouble with installing libevent, please:
+
+    1) download the package from offical web [http://libevent.org](http://libevent.org)
+    2) enter the directory run ./configure
+    3) run make (if you encounter the openssl file missing, find the install openssl directory and copy the header file to the folder of the libevent) and run make
+
+    `cp -R /usr/local/Cellar/openssl/1.0.2o_1/include/openssl/ ./openssl
+    `
+    4) run make install
+
 If you want to build the disk image with `make deploy` (.dmg / optional), you need RSVG
 
     brew install librsvg
