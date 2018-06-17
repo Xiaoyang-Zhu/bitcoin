@@ -1337,7 +1337,7 @@ bool CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector
     vchSig.pop_back();
 
     //vchVal should be uint256?
-    if (!VerifySignature(vchSig, pubkey, vchVal))
+    if (!pubkey.Verify(vchVal, vchSig))
         return false;
 
     return true;
