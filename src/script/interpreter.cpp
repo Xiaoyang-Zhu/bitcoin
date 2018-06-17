@@ -1336,7 +1336,8 @@ bool CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector
     vchSig.back();
     vchSig.pop_back();
 
-    //vchVal should be uint256?
+    //vchVal should be uint256? yes
+    //from CPubKey::Verify and secp256k1_ecdsa_verify, we can see the final parameter is unsigned char
     if (!pubkey.Verify((uint256)vchVal, vchSig))
         return false;
 
