@@ -1323,7 +1323,7 @@ bool TransactionSignatureChecker::CheckSig(const std::vector<unsigned char>& vch
     return true;
 }
 
-bool CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector<unsigned char>& vchPubKey, const std::vector<unsigned char>& vchVal) const
+bool CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector<unsigned char>& vchPubKey, const std::vector<unsigned char>& vchVal)
 {
     CPubKey pubkey(vchPubKey);
     if (!pubkey.IsValid())
