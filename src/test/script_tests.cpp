@@ -71,6 +71,7 @@ static ScriptErrorDesc script_errors[]={
     {SCRIPT_ERR_CHECKMULTISIGVERIFY, "CHECKMULTISIGVERIFY"},
     {SCRIPT_ERR_CHECKSIGVERIFY, "CHECKSIGVERIFY"},
     {SCRIPT_ERR_NUMEQUALVERIFY, "NUMEQUALVERIFY"},
+    {SCRIPT_ERR_CHECKSIGEQVALVERIFY, "CHECKSIGEQVALVERIFY"},
     {SCRIPT_ERR_BAD_OPCODE, "BAD_OPCODE"},
     {SCRIPT_ERR_DISABLED_OPCODE, "DISABLED_OPCODE"},
     {SCRIPT_ERR_INVALID_STACK_OPERATION, "INVALID_STACK_OPERATION"},
@@ -515,7 +516,7 @@ BOOST_AUTO_TEST_CASE(script_build)
     tests.push_back(TestBuilder(CScript() << ToByteVector(keys.pubkey0C) << OP_CHECKSIG,
                                 "P2SH(P2PK), bad redeemscript", SCRIPT_VERIFY_P2SH, true
                                ).PushSig(keys.key0).PushRedeem().DamagePush(10).ScriptError(SCRIPT_ERR_EVAL_FALSE));
-    
+
     tests.push_back(TestBuilder(CScript() << OP_DUP << OP_HASH160 << ToByteVector(keys.pubkey0.GetID()) << OP_EQUALVERIFY << OP_CHECKSIG,
                                 "P2SH(P2PKH)", SCRIPT_VERIFY_P2SH, true
                                ).PushSig(keys.key0).Push(keys.pubkey0).PushRedeem());
