@@ -1333,11 +1333,11 @@ bool CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector
     std::vector<unsigned char> vchSig(vchSigIn);
     if (vchSig.empty())
         return false;
-    int nHashType = vchSig.back();
+    vchSig.back();
     vchSig.pop_back();
 
     //vchVal should be uint256?
-    if (!pubkey.Verify(vchVal, vchSig))
+    if (!pubkey.Verify((uint256)vchVal, vchSig))
         return false;
 
     return true;
