@@ -1057,7 +1057,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                         //serror is set
                         return false;
                     }
-                    bool fSuccess = CheckSigEqVal(vchSig, vchPubKey, vchval);
+                    bool fSuccess = checker.CheckSigEqVal(vchSig, vchPubKey, scriptCode, sigversion, vchval);
 
                     if (!fSuccess && (flags & SCRIPT_VERIFY_NULLFAIL) && vchSig.size())
                         return set_error(serror, SCRIPT_ERR_SIG_NULLFAIL);
@@ -1323,7 +1323,7 @@ bool TransactionSignatureChecker::CheckSig(const std::vector<unsigned char>& vch
     return true;
 }
 
-bool CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector<unsigned char>& vchPubKey, const std::vector<unsigned char>& vchVal)
+bool TransactionSignatureChecker::CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector<unsigned char>& vchPubKey, const CScript& scriptCode, SigVersion sigversion, const std::vector<unsigned char>& vchVal) const
 {
     CPubKey pubkey(vchPubKey);
     if (!pubkey.IsValid())
@@ -1333,12 +1333,14 @@ bool CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector
     std::vector<unsigned char> vchSig(vchSigIn);
     if (vchSig.empty())
         return false;
-    vchSig.back();
+    int nHashType = vchSig.back();
     vchSig.pop_back();
 
+    uint256 sighash = SignatureHash(scriptCode, *txTo, nIn, nHashType, amount, sigversion, this->txdata);
+    sighash.begin();
     //vchVal should be uint256? yes
     //from CPubKey::Verify and secp256k1_ecdsa_verify, we can see the final parameter is unsigned char
-    if (!pubkey.Verify((uint256)vchVal, vchSig))
+    if (!VerifySignature(vchSig, pubkey, (uint256)vchVal))
         return false;
 
     return true;
