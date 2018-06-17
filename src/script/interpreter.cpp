@@ -1057,7 +1057,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                         //serror is set
                         return false;
                     }
-                    bool fSuccess = checker.CheckSigEqVal(vchSig, vchPubKey, vchval);
+                    bool fSuccess = CheckSigEqVal(vchSig, vchPubKey, vchval);
 
                     if (!fSuccess && (flags & SCRIPT_VERIFY_NULLFAIL) && vchSig.size())
                         return set_error(serror, SCRIPT_ERR_SIG_NULLFAIL);
@@ -1323,7 +1323,7 @@ bool TransactionSignatureChecker::CheckSig(const std::vector<unsigned char>& vch
     return true;
 }
 
-bool TransactionSignatureChecker::CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector<unsigned char>& vchPubKey, const std::vector<unsigned char>& vchVal) const
+bool CheckSigEqVal(const std::vector<unsigned char>& vchSigIn, const std::vector<unsigned char>& vchPubKey, const std::vector<unsigned char>& vchVal) const
 {
     CPubKey pubkey(vchPubKey);
     if (!pubkey.IsValid())
