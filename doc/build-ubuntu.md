@@ -1,4 +1,6 @@
-Ubuntu Version: 17.10
+Ubuntu Version: 17.10 desktop image
+
+download from site [http://releases.ubuntu.com/17.10.1/]
 
 To Build
 ---------------------
