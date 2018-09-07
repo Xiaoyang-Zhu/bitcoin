@@ -81,6 +81,24 @@ Starting Bitcoin Client
 bitcoind -regtest -daemon
 ```
 
+Stopping Bitcoin Client
+```bash
+ps -ef | grep bitcoind
+kill pid
+```
+
+```bash
+bitcoin-cli -regtest getpeerinfo
+```
+
+Reset Bitcoin Private Network: delete the regtest directory in the Bitcoin Core datadir:
+
+Linux: ~/.bitcoin/regtest
+
+Windows: %appdata%\bitcoin\regtest
+
+MacOS: $HOME/Library/Application Support/Bitcoin/regtest
+
 Sending Some Coins from Node1 to Node2
 ----------------------------------------------
 In your Node2, execute
