@@ -38,33 +38,35 @@ netstat -pant
 
 Blockchain Client Operations
 ----------------------------------------------
-```bash
-bitcoin-cli -regtest getblockchaininfo
-bitcoin-cli -regtest getwalletinfo
-```
 
-Getting a New Address
-```bash
-bitcoin-cli -regtest getnewaddress
-```
+#### Bitcoin Blockchain Operations
+    //Blocks
+    bitcoin-cli -regtest getblockchaininfo
+    bitcoin-cli -regtest generate 101     //Mining 101 Blocks
+    bitcoin-cli -regtest getbalance
+    bitcoin-cli -regtest getblock "blockhashvalue"
 
-Mining a Block
-```bash
-bitcoin-cli -regtest generate 1
-bitcoin-cli -regtest getblockchaininfo
-```
+    // Transactions
+    bitcoin-cli -regtest listtransactions
+    bitcoin-cli -regtest getrawtransaction "txid"
+    bitcoin-cli -regtest decoderawtransaction "rawtxhexstring"
+    bitcoin-cli -regtest signrawtransaction "rawtxhexstring"
+    bitcoin-cli -regtest sendrawtransaction "rawtxhexstring"
 
-Listing Transactions and Balance
-```bash
-bitcoin-cli -regtest listtransactions
-bitcoin-cli -regtest generate 100
-bitcoin-cli -regtest getbalance
-```
+    bitcoin-cli -regtest listunspent    //Viewing Your Unspent Bitcoins
 
-Viewing Your Unspent Bitcoins
-```bash
-bitcoin-cli -regtest listunspent
-```
+
+
+#### Bitcoin Network Operations
+    bitcoin-cli -regtest getpeerinfo
+
+
+#### Wallet Operations
+    bitcoin-cli -regtest getwalletinfo
+
+    bitcoin-cli -regtest listaddressgroupings     // listing all addresses
+    bitcoin-cli -regtest dumpprivkey "address"    // dump private key based on an address
+
 
 Preparing Other Ubuntu
 ----------------------------------------------
