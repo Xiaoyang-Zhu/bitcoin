@@ -1,73 +1,36 @@
-1. Extend the Script Language: OP_CHECKSIGEQVALVERIFY and ADD Operators
+# BIMSIT tutorial
 
-            OP_CHECKSIGEQVALVERIFY(sig, pk, hash_val):  Using public key to check signature equals the given hash value;
-            ADD (x1,x2): use OP_ADD in Bitcoin script; but you need check the overflow condition
+## OS Environment
 
+Ubuntu Version: 18.04 desktop image
 
-  File(1):
-    script.h
+download from site:  http://releases.ubuntu.com/18.04/
 
-    Line 176:
-      OP_CHECKSIGEQVALVERIFY = 0xb3,
-      OP_NOP4 = OP_CHECKSIGEQVALVERIFY,
+## Installing Bitcoin Core
 
-  File(2):
-    script.cpp
-      -    Line 134
-      +    case OP_CHECKSIGEQVALVERIFY     : return "OP_CHECKSIGEQVALVERIFY";
+##### Download our modified bitcoin codebase
 
-  File(3):
-    src/script/interpreter.h
+    git clone https://github.com/Xiaoyang-Zhu/bitcoin.git
+    git checkout IDTXSigner
 
-      SCRIPT_VERIFY_CHECKSIGEQVALVERIFY = (1U << 17),
+##### Compile, build and deploy the bitcoin codebase
 
-      //declare member function 
-      bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CScriptWitness* witness, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* serror = nullptr);
+Following our tutorial:  https://github.com/Xiaoyang-Zhu/bitcoin/blob/BIMS/doc/build-ubuntu.md
 
+    1. Install the dependencies of installing bitcoin
+    2. Compile the bitcoin codebase
+    3. Install the bitcoin client
 
-  File(4):
-    src/script/interpreter.cpp
+## Configure the bitcoin environment
 
-      1) In EvalScript function, add new opcode
+Following our tutorial:https://github.com/Xiaoyang-Zhu/bitcoin/blob/BIMS/doc/bitcoin-regtest-tutorial.md,
+we can learn the basic operations in bitcoin regtest mode and deploy bitcoin nodes as many as you want.
 
-        case OP_CHECKSIGEQVALVERIFY:
-        pop three operants and deliever to the following function
+## Get testnet keys and addresses
+In order to operate in bitcoin testnet, we need to generate the key pairs and addresses for bitcoin testnet.
+Following the tutorial https://github.com/Xiaoyang-Zhu/bitcoin/blob/BIMS/doc/bitcoin-regtest-addresstokeys.md
 
 
-
-      2) Add a new function like:
-
-        bool TransactionSignatureChecker::CheckSig
-
-      As:
-
-        bool ScriptSignatureChecker::CheckSig
-          pop three operands (signature, public key, hashvalue)
-          use public key to verify the signature equals hashvalue, then return true or false
-
-  File(5):
-    src/script/script_error.cpp
-
-      case SCRIPT_ERR_CHECKSIGEQVALVERIFY:
-      return "Script failed an OP_CHECKSIGEQVALVERIFY operation";
-
-  File(6):
-  src/script/script_error.h
-
-      SCRIPT_ERR_CHECKSIGEQVALVERIFY,
-
-  File(7):
-    src/policy/policy.h
-
-      SCRIPT_VERIFY_CHECKSIGEQVALVERIFY;
-
-2. Add New Types of Transactions: TX_ID {TX_reg, TX_upd, TX_rev}
-
-
-
-
-
-
-Compile, Build and Deploy:
-
-    1. following the build-osx.md file in ./doc/, which we have updated and added more instructions
+## Construct the identity transaction by hand using bitcoin commandline
+Following the tutorial https://github.com/Xiaoyang-Zhu/bitcoin/blob/BIMS/doc/bitcoin-regtest-buildtxbyhand-tutorial.md,
+we could manually create the identity transactions (including registration, update, revocation) using our modified bitcoin stack.
