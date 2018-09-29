@@ -1,6 +1,6 @@
-Ubuntu Version: 17.10 desktop image
+Ubuntu Version: 18.04 desktop image
 
-download from site [http://releases.ubuntu.com/17.10.1/]
+download from site [http://releases.ubuntu.com/18.04/]
 
 Install Bitcoin
 ---------------------
