@@ -6,7 +6,7 @@ Following our previous "bitcoin-regtest-addresstokeys" tutuorial, we got testnet
 
 ##### Offline key pair: `<sk_f>, <pk_f>, <identifier>`
 
-`<pk_f>` : 03c11f0db597b264746e3042096955a5f8509d2374320b02900c2b9995073a5244
+`<pk_f>` : 04c11f0db597b264746e3042096955a5f8509d2374320b02900c2b9995073a524498d7d8345b5d4a8d0a188c5f4a599ec97d592c6a7a38a00fecc1c46dd7bd4059
 
 `<sk_f>` : 92mqm7HyCPG9TgZWcuMYD3urJJf5xV5sR9PUPrAZWxiHja4iAiz
 
@@ -17,7 +17,7 @@ Following our previous "bitcoin-regtest-addresstokeys" tutuorial, we got testnet
 
 #### Online key pair `<sk_o>, <pk_o>, <address>`;
 
-`<pk_o>` : 03a434aa7ac19a69558243772914f79281b555ffed2f825a78006ef6f51b1ed6f4
+`<pk_o>` : 04a434aa7ac19a69558243772914f79281b555ffed2f825a78006ef6f51b1ed6f48add6538e56d067f7d4f6d4cb9efb59d6e83ff26e40a0559bd0c1e53456c1617
 
 `<sk_o>` : 939XmZ9LXjtsAouhtwWy6Ya4a4S357M7WsmEdXMwQ4UPr7LQo3F
 
@@ -28,7 +28,7 @@ Following our previous "bitcoin-regtest-addresstokeys" tutuorial, we got testnet
 
 #### redeem key pair `<sk_r>, <pk_r>, <address>`
 
-`<pk_r>` : 03f6dcea0cb836e2343b96b6fae8b8aa09f0488d58c469830e16e1a5db6e471ad3
+`<pk_r>` : 04f6dcea0cb836e2343b96b6fae8b8aa09f0488d58c469830e16e1a5db6e471ad32b038d583d7fc8e32b7e8d68c19b03cdfad4b33811c061040329f6a2fd9714d5
 
 `<sk_r>` : 93Tn6J2RzLDK5edFPoj9M4Af5ZkaHXGZq7y9dPmoMFTRBNLFGsA
 
@@ -253,7 +253,15 @@ ENDIF`
 
 
 
+
 ##### Creating a P2SH transaction
+
+###### Step 1. We use createrawtransaction function to organize the outputs and inputs:
+
+
+
+
+
 
 ###### Step 1. Constructing the transaction message that will be signed
 
